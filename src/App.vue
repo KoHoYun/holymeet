@@ -102,6 +102,12 @@
           class="pair-table-wrapper"
         >
           <div class="pair-title">매칭 {{ index + 1 }}</div>
+          <div style="margin-bottom:10px;">
+            안녕하세요. 홀리밋입니다^^
+            <br>매칭되셔서 채팅방 만들어드립니다. 편하게 대화하시고 주님 안에서 좋은 만남되시길 소망합니다.
+            <br>커플이 되신 경우에 인스타그램 홀리밋(@holy_meet_)이나 카톡으로 후기 남겨주시면
+            소정의 상품 드리오니 많은 연락바랍니다^^
+          </div>
           <table class="pair-table">
             <thead>
               <tr>
@@ -140,66 +146,131 @@
 
       <div class="table-container analysis-table-container">
         <table class="analysis-table">
+          <colgroup>
+            <col style="width: 20%" />
+            <col style="width: 20%" />
+            <col style="width: 20%" />
+            <col />
+          </colgroup>
           <thead>
             <tr>
               <th>대상</th>
-              <th>나를 선택한 사람 수</th>
+              <th>내가 선택한 사람</th>
               <th>나를 선택한 사람</th>
-              <th>매칭률(%)</th>
+              <th>추가 매칭 메시지</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="male in males" :key="'analysis-male-'+male.number" class="male-row">
-              <td class="male-row">남자 {{ male.number }}번({{ male.name || '' }})</td>
-              <td class="male-row">{{ male.chosenBy.length }}</td>
-              <td class="male-row chosen-by-list">
-                <template v-if="male.chosenBy.length">
-                  <span
-                    v-for="num in male.chosenBy"
+              <td class="male-row">남자 {{ male.number }}번({{ male.name || '' }})<br>- {{ male.kakao }}</td>
+              <td class="male-row">
+                <template>
+                  <div
+                    v-for="num in male.selected"
                     :key="'chosen-by-m-'+male.number+'-'+num"
                     class="chosen-by-item"
                     :title="getPersonName('female', num)"
                   >
                     여자 {{ num }}번({{ getPersonName('female', num) }})
-                  </span>
+                  </div>
+                </template>
+              </td>
+              <td class="male-row">
+                <template v-if="male.chosenBy.length">
+                  <div
+                    v-for="num in male.chosenBy"
+                    :key="'chosen-by-m-'+male.number+'-'+num"
+                    class="chosen-by-item"
+                    :title="getPersonName('female', num)"
+                  >
+                    여자 {{ num }}번({{ getPersonName('female', num) }})<br>- {{ getPersonKaKao('female', num) }}
+                </div>
                 </template>
                 <template v-else>
                   -
                 </template>
               </td>
               <td class="male-row">
-                {{
-                  male.selected.length && male.chosenBy.length
-                    ? ((male.selected.filter(f => male.chosenBy.includes(f)).length / male.selected.length) * 100).toFixed(1)
-                    : '0.0'
-                }}
+                <div v-if="male.chosenBy.filter(f => !male.selected.includes(f)).length!==0">
+                  안녕하세요, 홀리밋입니다^^<br>
+                  <span v-if="male.selected.filter(f => male.chosenBy.includes(f)).length > 0">
+                    {{male.name}}님과 
+                    <template>
+                      <span v-for="(num, idx) in male.chosenBy.filter(f => male.selected.includes(f))" :key="num">
+                        <span v-if="idx==0">여자 {{ num }}번({{ getPersonName('female', num) }})님</span>
+                        <span v-else>, 여자 {{ num }}번({{ getPersonName('female', num) }})님</span>
+                      </span>의 채팅방을 개설해드렸습니다.
+                    </template>
+                    <span><br>추가로 </span>
+                  </span>
+                  <div v-else></div>
+                  <span>
+                    <span v-for="(num, idx) in male.chosenBy.filter(f => !male.selected.includes(f))" :key="num">
+                      <span v-if="idx==0">여자 {{ num }}번({{ getPersonName('female', num) }})님</span>
+                      <span v-else>, 여자 {{ num }}번({{ getPersonName('female', num) }})님</span>
+                    </span>의 호감 표시가 들어와, 채팅방 개설 의사를 여쭙고자 연락드립니다.
+                  </span>
+                  <br>어떻게 진행해드릴까요?
+                </div>
+                <div v-else>X</div>
               </td>
             </tr>
 
             <tr v-for="female in females" :key="'analysis-female-'+female.number" class="female-row">
-              <td class="female-row">여자 {{ female.number }}번({{ female.name || '' }})</td>
-              <td class="female-row">{{ female.chosenBy.length }}</td>
-              <td class="female-row chosen-by-list">
+              <td class="female-row">여자 {{ female.number }}번({{ female.name || '' }})
+              <br>- {{ female.kakao }}
+              </td>
+              <td class="female-row">
+                <template>
+                  <div
+                    v-for="num in female.selected"
+                    :key="'chosen-by-f-'+female.number+'-'+num"
+                    class="chosen-by-item"
+                    :title="getPersonName('male', num)"
+                  >
+                    남자 {{ num }}번({{ getPersonName('male', num) }})
+                  </div>
+                </template>
+              </td>
+              <td class="female-row">
                 <template v-if="female.chosenBy.length">
-                  <span
+                  <div
                     v-for="num in female.chosenBy"
                     :key="'chosen-by-f-'+female.number+'-'+num"
                     class="chosen-by-item"
                     :title="getPersonName('male', num)"
                   >
                     남자 {{ num }}번({{ getPersonName('male', num) }})
-                  </span>
+                    <br>- {{ getPersonKaKao('male', num) }}
+                </div>
                 </template>
                 <template v-else>
                   -
                 </template>
               </td>
               <td class="female-row">
-                {{
-                  female.selected.length && female.chosenBy.length
-                    ? ((female.selected.filter(m => female.chosenBy.includes(m)).length / female.selected.length) * 100).toFixed(1)
-                    : '0.0'
-                }}
+                <div v-if="female.chosenBy.filter(f => !female.selected.includes(f)).length!==0">
+                  안녕하세요, 홀리밋입니다^^<br>
+                  <span v-if="female.selected.filter(f => female.chosenBy.includes(f)).length > 0">
+                    {{female.name}}님과 
+                    <template>
+                      <span v-for="(num, idx) in female.chosenBy.filter(f => female.selected.includes(f))" :key="num">
+                        <span v-if="idx==0">남자 {{ num }}번({{ getPersonName('male', num) }})님</span>
+                        <span v-else>, 남자 {{ num }}번({{ getPersonName('male', num) }})님</span>
+                      </span>의 채팅방을 개설해드렸습니다.
+                      <span><br>추가로 </span>
+                    </template>
+                  </span>
+                  <div v-else></div>
+                  <span>
+                    <span v-for="(num, idx) in female.chosenBy.filter(f => !female.selected.includes(f))" :key="num">
+                      <span v-if="idx==0">남자 {{ num }}번({{ getPersonName('male', num) }})님</span>
+                      <span v-else>, 남자 {{ num }}번({{ getPersonName('male', num) }})님</span>
+                    </span>의 호감 표시가 들어와, 채팅방 개설 의사를 여쭙고자 연락드립니다.
+                  </span>
+                  <br>어떻게 진행해드릴까요?
+                </div>
+                <div v-else>X</div>
               </td>
             </tr>
           </tbody>
@@ -225,7 +296,7 @@ class Person {
 export default {
   data() {
     return {
-      count: 4,
+      count: 5,
       males: [],
       females: [],
       isGenerated: false,
@@ -233,7 +304,8 @@ export default {
       mutualPairs: []
     }
   },
-
+  created() {
+  },
   methods: {
     generateList() {
       if (this.count < 1) {
@@ -302,7 +374,26 @@ export default {
       }
       return '알수없음'
     },
-
+    getPersonKaKao(gender, number) {
+      if (gender === 'male') {
+        const person = this.males.find(m => m.number === number)
+        return person ? person.kakao || '카톡없음' : '알수없음'
+      } else if (gender === 'female') {
+        const person = this.females.find(f => f.number === number)
+        return person ? person.kakao || '카톡없음' : '알수없음'
+      }
+      return '알수없음'
+    },
+    getPersonHp(gender, number) {
+      if (gender === 'male') {
+        const person = this.males.find(m => m.number === number)
+        return person ? person.hp || '번호없음' : '알수없음'
+      } else if (gender === 'female') {
+        const person = this.females.find(f => f.number === number)
+        return person ? person.hp || '번호없음' : '알수없음'
+      }
+      return '알수없음'
+    },
   }
 }
 </script>
