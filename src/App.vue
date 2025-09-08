@@ -104,7 +104,10 @@
           <div class="pair-title">매칭 {{ index + 1 }}</div>
           <div style="margin-bottom:10px;">
             안녕하세요. 홀리밋입니다^^
+            <br>
+            <br>{{ pair.male.name }}(남자 {{ pair.male.number }}번)님, {{ pair.female.name }}(여자 {{ pair.female.number }}번)님
             <br>매칭되셔서 채팅방 만들어드립니다. 편하게 대화하시고 주님 안에서 좋은 만남되시길 소망합니다.
+            <br>
             <br>커플이 되신 경우에 인스타그램 홀리밋(@holy_meet_)이나 카톡으로 후기 남겨주시면
             소정의 상품 드리오니 많은 연락바랍니다^^
           </div>
