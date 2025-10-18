@@ -5,7 +5,7 @@
     <section class="panel">
       
       <h1>홀리밋</h1>
-      <h2 class="panel-title">• 몇 대 몇 소개팅인가요?</h2>
+      <!-- <h2 class="panel-title">• 몇 대 몇 소개팅인가요?</h2>
       <form @submit.prevent="generateList" class="count-form">
         <label>
           인원 수:
@@ -16,7 +16,19 @@
       <p v-if="isGenerated" class="refresh-warning">
         소개팅 인원 수는 목록 생성 후 변경할 수 없습니다.<br />
         새로 입력하려면 페이지를 새로고침하세요.
-      </p>
+      </p> -->
+
+      <h2 class="panel-title">• 엑셀 데이터 붙여넣기</h2>
+      <textarea
+        v-model="excelInput"
+        placeholder="엑셀에서 성별	이름  나이  번호	음료  휴대폰번호 열 붙여넣기"
+        rows="6"
+        style="width:100%;padding:10px;font-size:1rem;"
+      ></textarea>
+      <div style="margin-top:10px;">
+        <button @click="importFromExcel">목록 자동 생성</button>
+      </div>
+      
     </section>
 
     <!-- 2. 남여 정보 입력하기 패널 -->
@@ -311,7 +323,8 @@ export default {
       females: [],
       isGenerated: false,
       showMutual: false,
-      mutualPairs: []
+      mutualPairs: [],
+      excelInput: '',
     }
   },
   created() {
@@ -404,6 +417,41 @@ export default {
       }
       return '알수없음'
     },
+    importFromExcel() {
+      if (!this.excelInput.trim()) {
+        alert('엑셀 데이터를 붙여넣어주세요.');
+        return;
+      }
+
+      const lines = this.excelInput.trim().split('\n');
+      const males = [];
+      const females = [];
+
+      lines.forEach((line) => {
+        const parts = line.split('\t');
+        if (parts.length < 6) return; // 성별, 이름, 나이, 번호, 음료, 휴대폰번호
+
+        const gender = parts[0].trim();
+        const name = parts[1].trim();
+        // const age = parts[2].trim();
+        const number = parseInt(parts[3].trim(), 10); // 숫자로 변환
+        // const drink = parts[4].trim();
+        const phone = parts[5].trim();
+
+        const obj = { gender, name, number, phone, selected: [], chosenBy: [], moreMatching: true };
+
+        if (gender === '남') males.push(obj);
+        else if (gender === '여') females.push(obj);
+      });
+
+      // 번호 순으로 정렬
+      this.males = males.sort((a, b) => a.number - b.number);
+      this.females = females.sort((a, b) => a.number - b.number);
+
+      alert(`남자 ${males.length}명, 여자 ${females.length}명 불러왔습니다!`);
+      this.isGenerated = true;
+    },
+
   }
 }
 </script>
