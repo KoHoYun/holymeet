@@ -12,6 +12,8 @@ import UserForm from '../pages/user/UserFormView.vue'
 import AdminLogin from '../pages/admin/AdminLoginView.vue'
 import AdminMain from '../pages/admin/AdminMainView.vue'
 import AdminVote from '../pages/admin/AdminVoteView.vue'
+import AdminSchedule from '../pages/admin/AdminScheduleView.vue'
+import AdminScheduleCreate from '../pages/admin/AdminScheduleCreateView.vue'
 
 Vue.use(Router)
 
@@ -55,6 +57,16 @@ const router = new Router({
       path: '/admin/vote',
       name: 'VoteAdmin',
       component: AdminVote
+    },
+    {
+      path: '/admin/schedule/list',
+      name: 'ScheduleAdmin',
+      component: AdminSchedule
+    },
+    {
+      path: '/admin/schedule/create',
+      name: 'ScheduleCreateAdmin',
+      component: AdminScheduleCreate
     }
   ]
 })

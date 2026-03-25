@@ -56,7 +56,7 @@ export default {
         return
       }
 
-      this.$router.push('/admin/main')
+      this.$router.push('/admin/schedule/list')
     }
   }
 }
