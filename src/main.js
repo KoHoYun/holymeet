@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import { supabase } from './services/'
+import { supabase } from './services/supabase'
 
 Vue.prototype.$supabase = supabase
 Vue.config.productionTip = false
