@@ -178,7 +178,7 @@
           </thead>
           <tbody>
             <tr v-for="male in males" :key="'analysis-male-'+male.number" class="male-row">
-              <td class="male-row">남자 {{ male.number }}번({{ male.name || '' }})<br>- {{ male.phone }}</td>
+              <td class="male-row">남자 {{ male.number }}번({{ male.name || '' }})<br>{{ male.phone }}</td>
               <td class="male-row">
                 <template>
                   <div
@@ -199,7 +199,7 @@
                     class="chosen-by-item"
                     :title="getPersonName('female', num)"
                   >
-                    여자 {{ num }}번({{ getPersonName('female', num) }})<br>- {{ getPersonHp('female', num) }}
+                    여자 {{ num }}번({{ getPersonName('female', num) }})<br>{{ getPersonHp('female', num) }}
                 </div>
                 </template>
                 <template v-else>

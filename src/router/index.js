@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Home from '../pages/HomePage.vue'
-import Vote from '../pages/VotePage.vue'
-import Result from '../pages/Result.vue'
+import Main from '../pages/MainView.vue'
+import Vote from '../pages/VoteView.vue'
+import Result from '../pages/ResultView.vue'
+import VoteAdmin from '../pages/VoteAdminView.vue'
 
 Vue.use(Router)
 
@@ -13,7 +14,7 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Main
     },
     {
       path: '/vote',
@@ -24,6 +25,11 @@ export default new Router({
       path: '/result',
       name: 'Result',
       component: Result
+    },
+    {
+      path: '/admin/vote',
+      name: 'VoteAdmin',
+      component: VoteAdmin
     }
   ]
 })
