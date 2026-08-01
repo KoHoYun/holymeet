@@ -21,7 +21,7 @@
       <h2 class="panel-title">• 엑셀 데이터 붙여넣기</h2>
       <textarea
         v-model="excelInput"
-        placeholder="엑셀에서 성별	이름  나이  번호	음료  휴대폰번호 열 붙여넣기"
+        placeholder="엑셀에서 성별	이름  나이  번호	음료  휴대폰번호 메모 열 붙여넣기"
         rows="6"
         style="width:100%;padding:10px;font-size:1rem;"
       ></textarea>
@@ -438,18 +438,62 @@ export default {
         // const drink = parts[4].trim();
         const phone = parts[5].trim();
 
-        const obj = { gender, name, number, phone, selected: [], chosenBy: [], moreMatching: true };
+        // 메모(없어도 됨)
+        const memo = (parts[6] || '').trim();
 
-        if (gender === '남') males.push(obj);
-        else if (gender === '여') females.push(obj);
+        const obj = {
+          gender,
+          name,
+          number,
+          phone,
+          selected: [],
+          chosenBy: [],
+          moreMatching: true
+        };
+
+        // 메모가 있을 때만 자동 선택
+        if (memo) {
+          obj.selected = memo
+            .split(',')
+            .map(v => parseInt(v.trim(), 10))
+            .filter(v => !isNaN(v));
+        }
+
+        if (gender === '남') {
+          males.push(obj);
+        } else if (gender === '여') {
+          females.push(obj);
+        }
       });
 
-      // 번호 순으로 정렬
+      // 번호순 정렬
       this.males = males.sort((a, b) => a.number - b.number);
       this.females = females.sort((a, b) => a.number - b.number);
 
-      alert(`남자 ${males.length}명, 여자 ${females.length}명 불러왔습니다!`);
+      // 선택한 사람(chosenBy)도 자동 생성
+      this.males.forEach(male => {
+        male.selected.forEach(no => {
+          const female = this.females.find(f => f.number === no);
+          if (female && !female.chosenBy.includes(male.number)) {
+            female.chosenBy.push(male.number);
+          }
+        });
+      });
+
+      this.females.forEach(female => {
+        female.selected.forEach(no => {
+          const male = this.males.find(m => m.number === no);
+          if (male && !male.chosenBy.includes(female.number)) {
+            male.chosenBy.push(female.number);
+          }
+        });
+      });
+
+      alert(`남자 ${this.males.length}명, 여자 ${this.females.length}명 불러왔습니다!`);
       this.isGenerated = true;
+
+      
+      this.showMutualSelections();
     },
 
   }
