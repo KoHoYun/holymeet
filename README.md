@@ -1,5 +1,12 @@
 # holymeet
 
+## deploy
+gh-pages로 배포됨
+```
+npm run build
+npm run deploy
+```
+
 ## Project setup
 ```
 npm install
