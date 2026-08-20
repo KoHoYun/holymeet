@@ -454,8 +454,8 @@ export default {
         // 메모가 있을 때만 자동 선택
         if (memo) {
           obj.selected = memo
-            .split(',')
-            .map(v => parseInt(v.trim(), 10))
+            .split('')
+            .map(v => parseInt(v, 10))
             .filter(v => !isNaN(v));
         }
 
